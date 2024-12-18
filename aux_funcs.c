@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:34:43 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/17 16:32:42 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:12:22 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,36 +59,24 @@ int	allocate_threads(pthread_t **threads, t_head *head)
 * @param t_head head e index i que sera utilizado no array
 * @param int i que sera utilizado no array
 */
+
+/*
+f	[f1 f2 f3 f4 f5]
+   
+p    [p1		 p2 	p3 	p4	 p5]
+	l=f1  r=1                   l=f5  r=f1
+   l= f[n]  r=f[(n + 1) % no_philos ]
+*/
+
+
 void	init_philo(t_head *head, int i)
 {
-	if (!i) // Primeiro philo
-	{
 		head->phil_arr[i].philo_id = i + 1;
-		head->phil_arr[i].eating = 0;
 		head->phil_arr[i].meals = 0;
 		head->phil_arr[i].head = head;
-		pthread_mutex_init(&head->phil_arr[i].r_fork, NULL);
-	}
-	else if (i == head->init.philo_amount - 1) // Ultimo philo
-	{
-		head->phil_arr[i].philo_id = i + 1;
-		head->phil_arr[i].eating = 0;
-		head->phil_arr[i].meals = 0;
-		head->phil_arr[i].head = head;
-		pthread_mutex_init(&head->phil_arr[i].r_fork, NULL);
-		head->phil_arr[i].l_fork = &head->phil_arr[head->init.philo_amount - 1].r_fork;
-	}
-	else // Outros
-	{
-		head->phil_arr[i].philo_id = i + 1;
-		head->phil_arr[i].eating = 0;
-		head->phil_arr[i].meals = 0;
-		head->phil_arr[i].head = head;
-		pthread_mutex_init(&head->phil_arr[i].r_fork, NULL);
-		head->phil_arr[i].l_fork = &head->phil_arr[i - 1].r_fork;
-	}
-	head->phil_arr[0].l_fork = &head->phil_arr[head->init.philo_amount - 1].r_fork;
-	pthread_mutex_init(head->phil_arr[0].l_fork, NULL);
+		head->phil_arr[i].ate = 0;
+		head->phil_arr[i].l_fork = &head->forks[i];
+		head->phil_arr[i].r_fork = &head->forks[(i + 1) % head->init.philo_amount];
 }
 
 int	allocate_philos(t_head *head)
@@ -103,4 +91,29 @@ int	allocate_philos(t_head *head)
 		init_philo(head, i);
 	}
 	return (1);
+}
+
+int		allocate_forks(t_head *head)
+{
+	int i;
+	head->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * (head->init.philo_amount));
+	if (!head->forks)
+		return (-1);
+	i = -1;
+	while (++i < head->init.philo_amount)
+		pthread_mutex_init(&head->forks[i], NULL);
+	return (1);
+}
+
+long  get_time(struct timeval *start, struct timeval *end)
+{
+    struct timeval result;
+    long milisseconds;
+    
+    gettimeofday(end, NULL);
+    result.tv_sec = end->tv_sec - start->tv_sec;
+    result.tv_usec = end->tv_usec - start->tv_usec;
+    milisseconds = result.tv_sec * 1000 + result.tv_usec / 1000;
+    /* printf(GREEN "[Miliseconds]:" RESET " %ld\n", milisseconds); */
+    return (milisseconds);
 }
