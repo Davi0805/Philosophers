@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread_funcs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 12:19:07 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/18 16:25:07 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:29:08 by davi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ void    *philo_func(void *arg)
     }
     if (philo.philo_id % 2 == 0)
         usleep(30000);
-    while (philo.head->someone_died == 0 && philo.meals != philo.head->init.eat_amount)
-    {
+    while (someone_died(philo.head->someone_died, philo.head) == 0 && philo.meals != philo.head->init.eat_amount)
+    {   
         if (philo.philo_id % 2 == 0)
         {
             pthread_mutex_lock(philo.l_fork);
-            take_fork(philo.philo_id, philo.head);
+                take_fork(philo.philo_id, philo.head);
             pthread_mutex_lock(philo.r_fork);
-            take_fork(philo.philo_id, philo.head);
+                take_fork(philo.philo_id, philo.head);
             philo.ate = 0;
             eating(philo.philo_id, philo.head);
             philo.ate = 1;
@@ -41,9 +41,9 @@ void    *philo_func(void *arg)
         else
         {
             pthread_mutex_lock(philo.r_fork);
-            take_fork(philo.philo_id, philo.head);
+                take_fork(philo.philo_id, philo.head);
             pthread_mutex_lock(philo.l_fork);
-            take_fork(philo.philo_id, philo.head);
+                take_fork(philo.philo_id, philo.head);
             philo.ate = 0;
             eating(philo.philo_id, philo.head);
             philo.ate = 1;
@@ -67,8 +67,21 @@ void    *monitor_func(void *arg)
     int i;
     
     head = (t_head*)arg;
-    while(head->someone_died == 0)
+
+    while (1)
     {
+        pthread_mutex_lock(&head->write);
+            if(head->threadsync == 1)
+                break;
+        pthread_mutex_unlock(&head->write);
+    }
+    
+    while(1)
+    {
+        pthread_mutex_lock(&head->write);
+        if (head->someone_died == 1)
+            break;
+        pthread_mutex_unlock(&head->write);
         usleep(head->init.time_die);
         i = -1;
         while (i < head->init.philo_amount)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 16:42:58 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/18 16:19:57 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/19 13:57:11 by davi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int thread_creator(t_head *head)
     }
     pthread_create(&head->monitor, NULL, monitor_func, (void *)&head);
     pthread_mutex_lock(&head->write);
+    init_time(head);
     head->threadsync = 1;
     pthread_mutex_unlock(&head->write);
     return (1);

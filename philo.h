@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 17:41:35 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/18 16:15:34 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:18:50 by davi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,23 +66,30 @@ typedef struct s_philo
 }               t_philo;
 
 //Init
-void    init_time(t_head *head);
 void    init_head(t_head *head, int ac, char **av);
-int	parse_error(int ac, char **av);
+int		allocate_forks(t_head *head);
+int     allocate_philos(t_head *head);
+int     parse_error(int ac, char **av);
+int     thread_creator(t_head *head);
+int     thread_join(t_head *head);
 
 
-//AUX
+//LIBFT
 long	ft_atol(const char *str);
 int     ft_isdigit(int c);
 
-//THREAD FUNCS
-long  get_time(struct timeval *start, struct timeval *end);
-int		allocate_forks(t_head *head);
-int	allocate_philos(t_head *head);
-int thread_creator(t_head *head);
+//TIME
+void    init_time(t_head *head);
+long    get_time(struct timeval *start, struct timeval *end);
+
+//GET
+int     someone_died(int bool, t_head *head);
+
+//THREAD
 void    *monitor_func(void *arg);
-int thread_join(t_head *head);
 void    *philo_func(void *arg);
+
+// LOG
 void    take_fork(int id, t_head *head);
 void    eating(int id, t_head *head);
 void    sleeping(int id, t_head *head);

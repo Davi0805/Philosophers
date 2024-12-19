@@ -4,7 +4,7 @@ CC = cc
 FLAGS = -Wall -Wextra -Werror
 INCFLAGS = -lpthread
 OBJS = $(SRCS:.c=.o)
-SRCS = main.c aux_funcs.c init.c thread_funcs.c log_funcs.c
+SRCS = main.c aux_funcs.c init.c thread_funcs.c log_funcs.c get.c
 GREEN = \033[0;32m
 YELLOW = \033[1;33m
 RED = \033[0;31m

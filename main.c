@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:34:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/18 15:55:43 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/19 13:56:59 by davi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int main(int ac, char **av)
     {
         printf(GREEN "[PARSE]:" RESET " SUCESSO!\n");
         init_head(&head, ac, av);
-        init_time(&head);
         allocate_forks(&head);
         if (!allocate_philos(&head))
         {
