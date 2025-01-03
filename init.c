@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 16:42:58 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/19 13:57:11 by davi             ###   ########.fr       */
+/*   Updated: 2024/12/20 14:52:36 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,15 @@ int	parse_error(int ac, char **av)
 	return (0);
 }
 
+// INIT: Inicia variaveis essenciais da struct head
 void    init_head(t_head *head, int ac, char **av)
 {
     head->init.philo_amount = (int)ft_atol(av[1]); //MEsma quantidade de forks
     head->init.time_die = (int)ft_atol(av[2]) * 1000;
     head->init.time_eat = (int)ft_atol(av[3]) * 1000;
     head->init.time_to_sleep = (int)ft_atol(av[4]) * 1000;
-    head->init.philo_created = 1;
     head->someone_died = 0;
+    head->full_amount = 0;
     pthread_mutex_init(&head->print, NULL);
     pthread_mutex_init(&head->write, NULL);
     if (ac == 6)
@@ -59,11 +60,14 @@ void    init_head(t_head *head, int ac, char **av)
                     head->init.time_to_sleep, head->init.eat_amount);
 }
 
+// INIT: Inicia a struct com o horario de inicio do programa
+// Preenche (&head->start)
 void    init_time(t_head *head)
 {
     gettimeofday(&head->start, NULL);
 }
 
+// INIT: Inicia as threads dos philos e monitor
 int thread_creator(t_head *head)
 {
     int i;
@@ -74,7 +78,7 @@ int thread_creator(t_head *head)
     {
         pthread_create(&head->phil_arr[i].thread, NULL, philo_func, (void *)(&head->phil_arr[i]));
     }
-    pthread_create(&head->monitor, NULL, monitor_func, (void *)&head);
+    pthread_create(&head->monitor, NULL, monitor_func, (void *)head);
     pthread_mutex_lock(&head->write);
     init_time(head);
     head->threadsync = 1;
@@ -82,6 +86,7 @@ int thread_creator(t_head *head)
     return (1);
 }
 
+// INIT?: Coleta os retornos das threads
 int thread_join(t_head *head)
 {
     int i;
@@ -90,5 +95,6 @@ int thread_join(t_head *head)
     while(++i < head->init.philo_amount)
         pthread_join(head->phil_arr[i].thread, NULL);
     pthread_join(head->monitor, NULL);
+    printf(RED "[FIM] - PHILOS CHEIOS [%d] - QTD DE REFEICOES [%d]\n" RESET, head->full_amount, head->init.eat_amount);
     return (1);
 }

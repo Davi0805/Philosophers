@@ -12,6 +12,8 @@
 
 #include "philo.h"
 
+// Log func: Print X(time in ms) X(thread id) has taken the fork
+// Using Mutex (&head->print)
 void    take_fork(int id, t_head *head)
 {
     pthread_mutex_lock(&head->print);
@@ -19,6 +21,8 @@ void    take_fork(int id, t_head *head)
     pthread_mutex_unlock(&head->print);
 }
 
+// Log func: Print X(time in ms) X(thread id) is eating
+// Using Mutex (&head->print)
 void    eating(int id, t_head *head)
 {
     pthread_mutex_lock(&head->print);
@@ -26,6 +30,8 @@ void    eating(int id, t_head *head)
     pthread_mutex_unlock(&head->print);
 }
 
+// Log func: Print X(time in ms) X(thread id) is sleeping
+// Using Mutex (&head->print)
 void    sleeping(int id, t_head *head)
 {
     pthread_mutex_lock(&head->print);
@@ -33,6 +39,8 @@ void    sleeping(int id, t_head *head)
     pthread_mutex_unlock(&head->print);
 }
 
+// Log func: Print X(time in ms) X(thread id) is thinking
+// Using Mutex (&head->print)
 void    thinking(int id, t_head *head)
 {
     pthread_mutex_lock(&head->print);

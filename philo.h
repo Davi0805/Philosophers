@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 17:41:35 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/19 14:18:50 by davi             ###   ########.fr       */
+/*   Updated: 2024/12/20 14:44:09 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ typedef struct s_philo t_philo;
 typedef struct s_init
 {
     int philo_amount;
-    int philo_created;
     int time_die;
     int time_eat;
     int time_to_sleep;
@@ -52,6 +51,7 @@ typedef struct s_head
     pthread_mutex_t     print;
     pthread_mutex_t     write;
     pthread_t           monitor;
+    int                 full_amount;
 }               t_head;
 
 typedef struct s_philo
@@ -81,6 +81,7 @@ int     ft_isdigit(int c);
 //TIME
 void    init_time(t_head *head);
 long    get_time(struct timeval *start, struct timeval *end);
+int	custom_sleep(int delay, t_head *head);
 
 //GET
 int     someone_died(int bool, t_head *head);

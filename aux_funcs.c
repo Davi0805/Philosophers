@@ -47,6 +47,7 @@ long	ft_atol(const char *str)
 	return (res * neg);
 }
 
+// INIT: Aloca o array de threads 
 int	allocate_threads(pthread_t **threads, t_head *head)
 {
 	*threads = (pthread_t *)malloc(sizeof(pthread_t) * (head->init.philo_amount + 1));
@@ -68,7 +69,8 @@ p    [p1		 p2 	p3 	p4	 p5]
    l= f[n]  r=f[(n + 1) % no_philos ]
 */
 
-
+// INIT: Inicia as variaveis dos philosophers
+// STRUCT: t_philo
 void	init_philo(t_head *head, int i)
 {
 		head->phil_arr[i].philo_id = i + 1;
@@ -79,6 +81,8 @@ void	init_philo(t_head *head, int i)
 		head->phil_arr[i].r_fork = &head->forks[(i + 1) % head->init.philo_amount];
 }
 
+// INIT: Aloca o array de philosophers e chama a funcao init_philo
+// STRUCT: t_philo
 int	allocate_philos(t_head *head)
 {
 	int i;
@@ -93,6 +97,7 @@ int	allocate_philos(t_head *head)
 	return (1);
 }
 
+// INIT: ALoca e inicia o array de forks
 int		allocate_forks(t_head *head)
 {
 	int i;
@@ -105,15 +110,17 @@ int		allocate_forks(t_head *head)
 	return (1);
 }
 
-long  get_time(struct timeval *start, struct timeval *end)
+int	custom_sleep(int delay, t_head *head)
 {
-    struct timeval result;
-    long milisseconds;
-    
-    gettimeofday(end, NULL);
-    result.tv_sec = end->tv_sec - start->tv_sec;
-    result.tv_usec = end->tv_usec - start->tv_usec;
-    milisseconds = result.tv_sec * 1000 + result.tv_usec / 1000;
-    /* printf(GREEN "[Miliseconds]:" RESET " %ld\n", milisseconds); */
-    return (milisseconds);
+	int timebase;
+
+	timebase = 0;
+	while(timebase < delay && !someone_died(head->someone_died, head))
+	{
+		usleep(10);
+		timebase += 10;
+	}
+	if (someone_died(head->someone_died, head))
+		return (1);
+	return (0);
 }
