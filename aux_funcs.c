@@ -6,7 +6,7 @@
 /*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:34:43 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2025/02/24 20:17:46 by davi             ###   ########.fr       */
+/*   Updated: 2025/02/24 22:02:26 by davi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,23 +73,23 @@ p    [p1		 p2 	p3 	p4	 p5]
 // STRUCT: t_philo
 void	init_philo(t_head *head, int i)
 {
-		head->phil_arr[i].philo_id = i + 1;
-		head->phil_arr[i].meals = 0;
-		head->phil_arr[i].head = head;
-		head->phil_arr[i].ate = 0;
-		head->phil_arr[i].last_meal = 0;
-		head->phil_arr[i].l_fork = &head->forks[i];
-		head->phil_arr[i].r_fork = &head->forks[(i + 1) % head->init.philo_amount];
-		head->phil_arr[i].full = 0;
-
-		pthread_mutex_init(&head->phil_arr[i].eat, NULL);
+	head->phil_arr[i].philo_id = i + 1;
+	head->phil_arr[i].meals = 0;
+	head->phil_arr[i].head = head;
+	head->phil_arr[i].ate = 0;
+	head->phil_arr[i].last_meal = 0;
+	head->phil_arr[i].l_fork = &head->forks[i];
+	head->phil_arr[i].r_fork = &head->forks[(i + 1) % head->init.philo_amount];
+	head->phil_arr[i].full = 0;
+	pthread_mutex_init(&head->phil_arr[i].eat, NULL);
 }
 
 // INIT: Aloca o array de philosophers e chama a funcao init_philo
 // STRUCT: t_philo
 int	allocate_philos(t_head *head)
 {
-	int i;
+	int	i;
+
 	head->phil_arr = (t_philo *)malloc(sizeof(t_philo) * (head->init.philo_amount));
 	if (!head->phil_arr)
 		return (-1);
@@ -102,9 +102,10 @@ int	allocate_philos(t_head *head)
 }
 
 // INIT: ALoca e inicia o array de forks
-int		allocate_forks(t_head *head)
+int	allocate_forks(t_head *head)
 {
-	int i;
+	int	i;
+
 	head->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * (head->init.philo_amount));
 	if (!head->forks)
 		return (-1);
@@ -116,10 +117,10 @@ int		allocate_forks(t_head *head)
 
 int	custom_sleep(int delay, t_head *head)
 {
-	int timebase;
+	int	timebase;
 
 	timebase = 0;
-	while(timebase < delay && !someone_died(head->someone_died, head))
+	while (timebase < delay && !someone_died(head->someone_died, head))
 	{
 		usleep(10);
 		timebase += 10;
@@ -131,19 +132,19 @@ int	custom_sleep(int delay, t_head *head)
 
 void	ft_log(int state, t_philo *philo)
 {
-	t_head *head;
+	t_head	*head;
 
 	head = philo->head;
 	pthread_mutex_lock(&head->print);
-	if(state == FORK)
-        printf("%lu %d has taken a fork\n", get_time(&head->start, &head->end), philo->philo_id);
+	if (state == FORK)
+		printf("%lu %d has taken a fork\n", get_time(&head->start, &head->end), philo->philo_id);
 	else if (state == EAT)
 		printf("%lu %d is eating\n", get_time(&head->start, &head->end), philo->philo_id);
 	else if (state == SLEEP)
 		printf("%lu %d is sleeping\n", get_time(&head->start, &head->end), philo->philo_id);
 	else if (state == THINK)
-    	printf("%lu %d is thinking\n", get_time(&head->start, &head->end), philo->philo_id);
+		printf("%lu %d is thinking\n", get_time(&head->start, &head->end), philo->philo_id);
 	else if (state == DIE)
-    	printf("%lu %d has died\n", get_time(&head->start, &head->end), philo->philo_id);
+		printf("%lu %d has died\n", get_time(&head->start, &head->end), philo->philo_id);
 	pthread_mutex_unlock(&head->print);
 }
