@@ -6,7 +6,7 @@
 /*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:34:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/19 13:56:59 by davi             ###   ########.fr       */
+/*   Updated: 2025/02/24 21:21:40 by davi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int main(int ac, char **av)
         }
         thread_creator(&head);
         thread_join(&head);
+        destroy_mutexes(&head);
+        free_resources(&head);
     }
     else
     {

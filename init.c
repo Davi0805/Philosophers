@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 16:42:58 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/20 14:52:36 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2025/02/24 20:29:29 by davi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ void    init_head(t_head *head, int ac, char **av)
     head->init.time_to_sleep = (int)ft_atol(av[4]) * 1000;
     head->someone_died = 0;
     head->full_amount = 0;
+    head->end_flag = 0;
     pthread_mutex_init(&head->print, NULL);
     pthread_mutex_init(&head->write, NULL);
+    pthread_mutex_init(&head->end_block, NULL);
     if (ac == 6)
         head->init.eat_amount = (int)ft_atol(av[5]);
     else

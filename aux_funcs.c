@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aux_funcs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:34:43 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/18 16:12:22 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2025/02/24 20:17:46 by davi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,12 @@ void	init_philo(t_head *head, int i)
 		head->phil_arr[i].meals = 0;
 		head->phil_arr[i].head = head;
 		head->phil_arr[i].ate = 0;
+		head->phil_arr[i].last_meal = 0;
 		head->phil_arr[i].l_fork = &head->forks[i];
 		head->phil_arr[i].r_fork = &head->forks[(i + 1) % head->init.philo_amount];
+		head->phil_arr[i].full = 0;
+
+		pthread_mutex_init(&head->phil_arr[i].eat, NULL);
 }
 
 // INIT: Aloca o array de philosophers e chama a funcao init_philo
@@ -123,4 +127,23 @@ int	custom_sleep(int delay, t_head *head)
 	if (someone_died(head->someone_died, head))
 		return (1);
 	return (0);
+}
+
+void	ft_log(int state, t_philo *philo)
+{
+	t_head *head;
+
+	head = philo->head;
+	pthread_mutex_lock(&head->print);
+	if(state == FORK)
+        printf("%lu %d has taken a fork\n", get_time(&head->start, &head->end), philo->philo_id);
+	else if (state == EAT)
+		printf("%lu %d is eating\n", get_time(&head->start, &head->end), philo->philo_id);
+	else if (state == SLEEP)
+		printf("%lu %d is sleeping\n", get_time(&head->start, &head->end), philo->philo_id);
+	else if (state == THINK)
+    	printf("%lu %d is thinking\n", get_time(&head->start, &head->end), philo->philo_id);
+	else if (state == DIE)
+    	printf("%lu %d has died\n", get_time(&head->start, &head->end), philo->philo_id);
+	pthread_mutex_unlock(&head->print);
 }

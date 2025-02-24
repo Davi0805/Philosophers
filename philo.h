@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 17:41:35 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/20 14:44:09 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2025/02/24 21:21:29 by davi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@
 #define CYAN "\033[0;36m"
 #define WHITE "\033[0;37m"
 
+#define FORK 1
+#define EAT 2
+#define SLEEP 3
+#define THINK 4
+#define DIE 5
+
 typedef struct s_philo t_philo;
 
 typedef struct s_init
@@ -48,9 +54,13 @@ typedef struct s_head
     pthread_mutex_t    *forks;
     t_philo       *phil_arr;
     int           threadsync;
+    int            end_flag;
     pthread_mutex_t     print;
     pthread_mutex_t     write;
     pthread_t           monitor;
+
+    pthread_mutex_t end_block;
+    
     int                 full_amount;
 }               t_head;
 
@@ -63,6 +73,9 @@ typedef struct s_philo
     t_head  *head;
     pthread_mutex_t *l_fork;
     pthread_mutex_t *r_fork;
+    pthread_mutex_t eat;
+    int     full;
+    int last_meal;
 }               t_philo;
 
 //Init
@@ -72,6 +85,7 @@ int     allocate_philos(t_head *head);
 int     parse_error(int ac, char **av);
 int     thread_creator(t_head *head);
 int     thread_join(t_head *head);
+void	threadSync(t_head *head);
 
 
 //LIBFT
@@ -85,16 +99,24 @@ int	custom_sleep(int delay, t_head *head);
 
 //GET
 int     someone_died(int bool, t_head *head);
+int     get_int(pthread_mutex_t *mutex, int *value);
+void	set_int(pthread_mutex_t *mutex, int *target, int value);
+
+void increment(pthread_mutex_t *mutex, int *value);
 
 //THREAD
 void    *monitor_func(void *arg);
 void    *philo_func(void *arg);
 
 // LOG
-void    take_fork(int id, t_head *head);
-void    eating(int id, t_head *head);
-void    sleeping(int id, t_head *head);
-void    thinking(int id, t_head *head);
+void	ft_log(int state, t_philo *philo);
 /* void	allocate_threads(pthread_t **threads, t_head *head); */
+void    eating(t_philo *philo);
+void    thinking(t_philo *philo);
+void    sleeping(t_philo *philo);
+void    philo_full(t_philo *philo);
+
+void destroy_mutexes(t_head *head);
+void free_resources(t_head *head);
 
 #endif

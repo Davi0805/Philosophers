@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread_funcs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 12:19:07 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/20 15:53:24 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2025/02/24 20:50:18 by davi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,78 +14,64 @@
 
 void    *philo_func(void *arg)
 {
-    t_philo philo;
+    t_philo *philo;
+    t_head *head;
 
-    philo = *((t_philo*)arg);
-    while(philo.head->threadsync == 0)
-    {
-        pthread_mutex_lock(&philo.head->write);
-        pthread_mutex_unlock(&philo.head->write);
-    }
-    if (philo.philo_id % 2 == 0)
-        custom_sleep(30000, philo.head);
-        /* usleep(30000); */
-    while (someone_died(philo.head->someone_died, philo.head) == 0 && philo.meals != philo.head->init.eat_amount)
+    philo = (t_philo*)arg;
+    head = philo->head;
+    threadSync(philo->head);
+     
+    if (philo->philo_id % 2 == 0)
+        custom_sleep(30000, philo->head);
+        
+    while (!get_int(&head->end_block, &head->end_flag))
     {   
-        if (philo.philo_id % 2 == 0)
+        if (head->init.eat_amount != -1 && philo->meals == head->init.eat_amount)
         {
-            pthread_mutex_lock(philo.l_fork);
-                if (someone_died(philo.head->someone_died, philo.head))
-                    break;
-                take_fork(philo.philo_id, philo.head);
-            pthread_mutex_lock(philo.r_fork);
-                if (someone_died(philo.head->someone_died, philo.head))
-                    break;
-                take_fork(philo.philo_id, philo.head);
-            philo.ate = 0;
-                if (someone_died(philo.head->someone_died, philo.head))
-                    break;
-            eating(philo.philo_id, philo.head);
-            philo.ate = 1;
-            /* usleep(philo.head->init.time_eat); */
-            custom_sleep(philo.head->init.time_eat, philo.head);
-        }
-        else
-        {
-            pthread_mutex_lock(philo.r_fork);
-                if (someone_died(philo.head->someone_died, philo.head))
-                    break;
-                take_fork(philo.philo_id, philo.head);
-            pthread_mutex_lock(philo.l_fork);
-                if (someone_died(philo.head->someone_died, philo.head))
-                    break;
-                take_fork(philo.philo_id, philo.head);
-            philo.ate = 0;
-                if (someone_died(philo.head->someone_died, philo.head))
-                    break;
-            eating(philo.philo_id, philo.head);
-            philo.ate = 1;
-            /* usleep(philo.head->init.time_eat); */
-            custom_sleep(philo.head->init.time_eat, philo.head);
-
-        }
-        pthread_mutex_unlock(philo.l_fork);
-        pthread_mutex_unlock(philo.r_fork);
-        if (someone_died(philo.head->someone_died, philo.head))
+            philo_full(philo);
             break;
-        sleeping(philo.philo_id, philo.head);
-        /* usleep(philo.head->init.time_to_sleep); */
-        custom_sleep(philo.head->init.time_to_sleep, philo.head);
-        if (someone_died(philo.head->someone_died, philo.head))
-            break;
-        thinking(philo.philo_id, philo.head);
-        philo.meals++;
-    }
-    if (philo.meals == philo.head->init.eat_amount)
-    {
-        pthread_mutex_lock(&philo.head->write);
-        philo.head->full_amount += 1;
-        pthread_mutex_unlock(&philo.head->write);
+        }
+        
+        eating(philo);
+        sleeping(philo);
+        thinking(philo);
     }
     return (NULL);
 }
 
-void    *monitor_func(void *arg)
+void *monitor_func(void *arg)
+{
+    t_head *head;
+    t_philo *philo_arr;
+    int current_time;
+    int i;
+
+    head = (t_head*)arg;
+    philo_arr = head->phil_arr;
+    threadSync(head);
+    i = 0;
+    while (!get_int(&head->end_block, &head->end_flag))
+    {
+        if (head->init.eat_amount != -1 && get_int(&head->write, &head->full_amount) == head->init.philo_amount)
+        {
+            set_int(&head->end_block, &head->end_flag, 1);
+            break;
+        }
+        current_time = get_time(&head->start, &head->end);
+        if (!get_int(&philo_arr[i].eat, &philo_arr[i].full) &&
+            current_time - get_int(&philo_arr[i].eat, &philo_arr[i].last_meal) >= head->init.time_die)
+        {
+            ft_log(DIE, &philo_arr[i]);
+            set_int(&head->end_block, &head->end_flag, 1);
+        }
+        i = (i + 1) % head->init.philo_amount;
+    }
+    return (NULL);
+}
+
+
+
+/* void    *monitor_func(void *arg)
 {
     t_head *head;
     int i;
@@ -114,4 +100,4 @@ void    *monitor_func(void *arg)
         printf(RED "%lu ALGUEM MORREU ENT %d\n" RESET, get_time(&head->start, &head->end), head->someone_died);
     }
     return (NULL);
-}
+} */

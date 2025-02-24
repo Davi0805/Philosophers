@@ -6,7 +6,7 @@
 /*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:11:41 by davi              #+#    #+#             */
-/*   Updated: 2024/12/19 14:15:17 by davi             ###   ########.fr       */
+/*   Updated: 2025/02/24 20:21:07 by davi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,29 @@ long  get_time(struct timeval *start, struct timeval *end)
     milisseconds = result.tv_sec * 1000 + result.tv_usec / 1000;
     /* printf(GREEN "[Miliseconds]:" RESET " %ld\n", milisseconds); */
     return (milisseconds);
+}
+
+void	set_int(pthread_mutex_t *mutex, int *target, int value)
+{
+	pthread_mutex_lock(mutex);
+	*target = value;
+	pthread_mutex_unlock(mutex);
+	return ;
+}
+
+int	get_int(pthread_mutex_t *mutex, int *value)
+{
+	int	temp;
+
+	pthread_mutex_lock(mutex);
+	temp = *value;
+	pthread_mutex_unlock(mutex);
+	return (temp);
+}
+
+void increment(pthread_mutex_t *mutex, int *value)
+{
+    pthread_mutex_lock(mutex);
+    (*value)++;
+    pthread_mutex_unlock(mutex);
 }
