@@ -116,20 +116,17 @@ int	allocate_forks(t_head *head)
 	return (1);
 }
 
-// N USAR
-int	custom_sleep(int delay, t_head *head)
-{
-	int	timebase;
 
-	timebase = 0;
-	while (timebase < delay && !someone_died(head->someone_died, head))
+void	custom_sleep(long delay, t_head *head)
+{
+	long	time;
+
+	time = get_time(&head->start, &head->end);
+	while (get_time(&head->start, &head->end) - time < delay / 1000)
 	{
-		usleep(10);
-		timebase += 10;
+		usleep(100);
 	}
-	if (someone_died(head->someone_died, head))
-		return (1);
-	return (0);
+	return ;
 }
 
 void	ft_log(int state, t_philo *philo)

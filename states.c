@@ -42,8 +42,8 @@ void	eating(t_philo *philo)
 	ft_log(EAT, philo);
 	if (head->init.eat_amount != -1)
 		philo->meals++;
-	/* custom_sleep(head->init.time_eat, head); */
-	usleep(head->init.time_eat);
+	custom_sleep(head->init.time_eat, head);
+	/* usleep(head->init.time_eat); */
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);
 }
@@ -54,8 +54,8 @@ void	sleeping(t_philo *philo)
 
 	head = philo->head;
 	ft_log(SLEEP, philo);
-	usleep(head->init.time_to_sleep);
-	/* custom_sleep(head->init.time_to_sleep, head); */
+	/* usleep(head->init.time_to_sleep); */
+	custom_sleep(head->init.time_to_sleep, head);
 }
 
 void	thinking(t_philo *philo)

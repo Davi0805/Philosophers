@@ -93,7 +93,7 @@ int		ft_isdigit(int c);
 //TIME
 void	init_time(t_head *head);
 long	get_time(struct timeval *start, struct timeval *end);
-int		custom_sleep(int delay, t_head *head);
+void		custom_sleep(long delay, t_head *head);
 
 //GET
 int		someone_died(int bool, t_head *head);

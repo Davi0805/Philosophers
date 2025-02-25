@@ -22,7 +22,7 @@ void	*philo_func(void *arg)
 	thread_sync(philo->head);
 	if (philo->philo_id % 2 == 0)
 		usleep(3000);
-		/* custom_sleep(30000, philo->head); */
+		/* custom_sleep(3000, philo->head); */
 	while (!get_int(&head->end_block, &head->end_flag))
 	{
 		if (head->init.eat_amount != -1 && philo->meals == head->init.eat_amount)
