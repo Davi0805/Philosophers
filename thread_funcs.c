@@ -21,7 +21,7 @@ void	*philo_func(void *arg)
 	head = philo->head;
 	thread_sync(philo->head);
 	if (philo->philo_id % 2 == 0)
-		usleep(30000);
+		usleep(3000);
 		/* custom_sleep(30000, philo->head); */
 	while (!get_int(&head->end_block, &head->end_flag))
 	{
@@ -48,7 +48,7 @@ void	*monitor_func(void *arg)
 	philo_arr = head->phil_arr;
 	thread_sync(head);
 	i = 0;
-	while (!get_int(&head->end_block, &head->end_flag))
+	while (get_int(&head->end_block, &head->end_flag) == 0)
 	{
 		if (head->init.eat_amount != -1 && get_int(&head->write, &head->full_amount) == head->init.philo_amount)
 		{
@@ -56,8 +56,8 @@ void	*monitor_func(void *arg)
 			break ;
 		}
 		current_time = get_time(&head->start, &head->end);
-		if (!get_int(&philo_arr[i].eat, &philo_arr[i].full) && current_time
-			- get_int(&philo_arr[i].eat, &philo_arr[i].last_meal) >= head->init.time_die)
+		if (get_int(&philo_arr[i].eat, &philo_arr[i].full) == 0 && current_time
+			- get_int(&philo_arr[i].eat, &philo_arr[i].last_meal) >= head->init.time_die / 1000)
 		{
 			ft_log(DIE, &philo_arr[i]);
 			set_int(&head->end_block, &head->end_flag, 1);
@@ -66,34 +66,3 @@ void	*monitor_func(void *arg)
 	}
 	return (NULL);
 }
-
-/* void    *monitor_func(void *arg)
-{
-	t_head *head;
-	int i;
-	int comidos = 0;
-	
-	head = (t_head*)arg;
-	while (head->threadsync == 0)
-	{
-		pthread_mutex_lock(&head->write);
-		pthread_mutex_unlock(&head->write);
-	}
-	
-	while(head->someone_died == 0 && head->full_amount != head->init.philo_amount)
-	{
-		usleep(head->init.time_die);
-		i = -1;
-		while (++i < head->init.philo_amount)
-		{
-			pthread_mutex_lock(&head->write);
-			if (head->phil_arr[i].ate == 0 && comidos != 0)
-				head->someone_died = 1;
-			else
-				comidos++;
-			pthread_mutex_unlock(&head->write);
-		}
-		printf(RED "%lu ALGUEM MORREU ENT %d\n" RESET, get_time(&head->start, &head->end), head->someone_died);
-	}
-	return (NULL);
-} */

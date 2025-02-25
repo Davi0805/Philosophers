@@ -5,13 +5,14 @@
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
       "request": "launch",
-      "args": [],
+      "args": ["4", "200", "200", "200"],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/davi/Documents/Philosophers",
-      "program": "/home/davi/Documents/Philosophers/build/Debug/outDebug",
+      "cwd": "/home/dmelo-ca/Documents/aval/Philosophers",
+      "program": "/home/dmelo-ca/Documents/aval/Philosophers/philo",
       "MIMode": "gdb",
-      "miDebuggerPath": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "stopAtEntry": true,
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",

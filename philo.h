@@ -72,6 +72,7 @@ typedef struct s_philo
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	eat;
+	pthread_mutex_t mutex;
 	int				full;
 	int				last_meal;
 }				t_philo;
@@ -112,6 +113,7 @@ void	eating(t_philo *philo);
 void	thinking(t_philo *philo);
 void	sleeping(t_philo *philo);
 void	philo_full(t_philo *philo);
+void	ft_debug(t_head *head, char *str, int value, int value2);
 
 void	destroy_mutexes(t_head *head);
 void	free_resources(t_head *head);

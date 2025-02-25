@@ -82,6 +82,7 @@ void	init_philo(t_head *head, int i)
 	head->phil_arr[i].r_fork = &head->forks[(i + 1) % head->init.philo_amount];
 	head->phil_arr[i].full = 0;
 	pthread_mutex_init(&head->phil_arr[i].eat, NULL);
+	pthread_mutex_init(&head->phil_arr[i].mutex, NULL);
 }
 
 // INIT: Aloca o array de philosophers e chama a funcao init_philo
@@ -115,6 +116,7 @@ int	allocate_forks(t_head *head)
 	return (1);
 }
 
+// N USAR
 int	custom_sleep(int delay, t_head *head)
 {
 	int	timebase;
@@ -146,5 +148,12 @@ void	ft_log(int state, t_philo *philo)
 		printf("%lu %d is thinking\n", get_time(&head->start, &head->end), philo->philo_id);
 	else if (state == DIE)
 		printf("%lu %d has died\n", get_time(&head->start, &head->end), philo->philo_id);
+	pthread_mutex_unlock(&head->print);
+}
+
+void	ft_debug(t_head *head, char *str, int value, int value2)
+{
+	pthread_mutex_lock(&head->print);
+	printf("[%s] - %d - %d\n", str, value, value2);
 	pthread_mutex_unlock(&head->print);
 }
