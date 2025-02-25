@@ -39,7 +39,6 @@ void	eating(t_philo *philo)
 		return ;
 	take_fork(philo);
 	set_int(&philo->eat, &philo->last_meal, get_time(&head->start, &head->end));
-	/* printf("[PHILO LAST MEAL] - %d\n", philo->last_meal); */
 	ft_log(EAT, philo);
 	if (head->init.eat_amount != -1)
 		philo->meals++;

@@ -137,6 +137,8 @@ void	ft_log(int state, t_philo *philo)
 	t_head	*head;
 
 	head = philo->head;
+	if (get_int(&head->end_block, &head->end_flag))
+		return ;
 	pthread_mutex_lock(&head->print);
 	if (state == FORK)
 		printf("%lu %d has taken a fork\n", get_time(&head->start, &head->end), philo->philo_id);
