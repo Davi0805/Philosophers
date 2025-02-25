@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 17:41:35 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2025/02/24 22:13:10 by davi             ###   ########.fr       */
+/*   Updated: 2025/02/25 17:13:05 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef struct s_init
 typedef struct s_head
 {
 	t_init			init;
-	int				someone_died;
 	struct timeval	start;
 	struct timeval	end;
 	pthread_mutex_t	*forks;
@@ -72,13 +71,14 @@ typedef struct s_philo
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	eat;
-	pthread_mutex_t mutex;
+	pthread_mutex_t	mutex;
 	int				full;
 	int				last_meal;
 }				t_philo;
 
 //Init
 void	init_head(t_head *head, int ac, char **av);
+void	init_philo(t_head *head, int i);
 int		allocate_forks(t_head *head);
 int		allocate_philos(t_head *head);
 int		parse_error(int ac, char **av);
@@ -93,10 +93,9 @@ int		ft_isdigit(int c);
 //TIME
 void	init_time(t_head *head);
 long	get_time(struct timeval *start, struct timeval *end);
-void		custom_sleep(long delay, t_head *head);
+void	custom_sleep(long delay, t_head *head);
 
 //GET
-int		someone_died(int bool, t_head *head);
 int		get_int(pthread_mutex_t *mutex, int *value);
 void	set_int(pthread_mutex_t *mutex, int *target, int value);
 

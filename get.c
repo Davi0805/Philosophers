@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:11:41 by davi              #+#    #+#             */
-/*   Updated: 2025/02/24 21:54:11 by davi             ###   ########.fr       */
+/*   Updated: 2025/02/25 17:12:53 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-// Getter: Return the int received
-// Using Mutex (&head->write)
-int	someone_died(int bool, t_head *head)
-{
-	int	i;
-
-	pthread_mutex_lock(&head->write);
-	i = bool;
-	pthread_mutex_unlock(&head->write);
-	return (i);
-}
 
 // Getter: Return the time passed in milisseconds
 long	get_time(struct timeval *start, struct timeval *end)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread_funcs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 12:19:07 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2025/02/24 21:48:35 by davi             ###   ########.fr       */
+/*   Updated: 2025/02/25 17:09:08 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ void	*philo_func(void *arg)
 	thread_sync(philo->head);
 	if (philo->philo_id % 2 == 0)
 		usleep(3000);
-		/* custom_sleep(3000, philo->head); */
 	while (!get_int(&head->end_block, &head->end_flag))
 	{
-		if (head->init.eat_amount != -1 && philo->meals == head->init.eat_amount)
+		if (head->init.eat_amount != -1 && philo->meals
+			== head->init.eat_amount)
 		{
 			philo_full(philo);
 			break ;
@@ -57,7 +57,7 @@ void	*monitor_func(void *arg)
 		}
 		current_time = get_time(&head->start, &head->end);
 		if (get_int(&philo_arr[i].eat, &philo_arr[i].full) == 0 && current_time
-			- get_int(&philo_arr[i].eat, &philo_arr[i].last_meal) >= head->init.time_die / 1000)
+			- get_int(&philo_arr[i].mutex, &philo_arr[i].last_meal) >= head->init.time_die / 1000)
 		{
 			ft_log(DIE, &philo_arr[i]);
 			set_int(&head->end_block, &head->end_flag, 1);
