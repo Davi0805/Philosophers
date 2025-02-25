@@ -76,12 +76,12 @@ int	thread_creator(t_head *head)
 
 	head->threadsync = 0;
 	i = -1;
+	pthread_mutex_lock(&head->write);
 	while (++i < head->init.philo_amount)
 	{
 		pthread_create(&head->phil_arr[i].thread, NULL, philo_func, (void *)(&head->phil_arr[i]));
 	}
 	pthread_create(&head->monitor, NULL, monitor_func, (void *)head);
-	pthread_mutex_lock(&head->write);
 	init_time(head);
 	head->threadsync = 1;
 	pthread_mutex_unlock(&head->write);

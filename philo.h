@@ -32,7 +32,7 @@
 # define EAT 2
 # define SLEEP 3
 # define THINK 4
-# define DIE
+# define DIE 5
 
 typedef struct s_philo	t_philo;
 
@@ -83,7 +83,7 @@ int		allocate_philos(t_head *head);
 int		parse_error(int ac, char **av);
 int		thread_creator(t_head *head);
 int		thread_join(t_head *head);
-void	threadSync(t_head *head);
+void	thread_sync(t_head *head);
 
 //LIBFT
 long	ft_atol(const char *str);

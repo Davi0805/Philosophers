@@ -14,7 +14,7 @@ all: philo
 
 philo: $(OBJS)
 	@echo "# $(GREEN)Building project...$(NC)"
-	@$(CC) -o philo $(OBJS) $(FLAGS) $(INCFLAGS) && echo "$(GREEN)Done!$(NC)"
+	@$(CC) -o philo $(OBJS) $(FLAGS) $(INCFLAGS) -g && echo "$(GREEN)Done!$(NC)"
 
 %.o: %.c
 	@$(CC) $(FLAGS) -c $< -o $@

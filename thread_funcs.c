@@ -19,9 +19,10 @@ void	*philo_func(void *arg)
 
 	philo = (t_philo *)arg;
 	head = philo->head;
-	threadSync(philo->head);
+	thread_sync(philo->head);
 	if (philo->philo_id % 2 == 0)
-		custom_sleep(30000, philo->head);
+		usleep(30000);
+		/* custom_sleep(30000, philo->head); */
 	while (!get_int(&head->end_block, &head->end_flag))
 	{
 		if (head->init.eat_amount != -1 && philo->meals == head->init.eat_amount)
@@ -45,7 +46,7 @@ void	*monitor_func(void *arg)
 
 	head = (t_head *)arg;
 	philo_arr = head->phil_arr;
-	threadSync(head);
+	thread_sync(head);
 	i = 0;
 	while (!get_int(&head->end_block, &head->end_flag))
 	{
