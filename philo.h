@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 17:41:35 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2025/02/25 17:13:05 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2025/02/26 09:40:36 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,17 +104,18 @@ void	increment(pthread_mutex_t *mutex, int *value);
 //THREAD
 void	*monitor_func(void *arg);
 void	*philo_func(void *arg);
+void	is_dead(t_head *head, t_philo *philo_arr, int i, int current_time);
 
 // LOG
 void	ft_log(int state, t_philo *philo);
-/* void	allocate_threads(pthread_t **threads, t_head *head); */
 void	eating(t_philo *philo);
 void	thinking(t_philo *philo);
 void	sleeping(t_philo *philo);
 void	philo_full(t_philo *philo);
-void	ft_debug(t_head *head, char *str, int value, int value2);
 
 void	destroy_mutexes(t_head *head);
 void	free_resources(t_head *head);
+void	free_forks(t_head *head);
+void	free_philos(t_head *head);
 
 #endif

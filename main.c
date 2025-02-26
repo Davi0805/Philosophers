@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi <davi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:34:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2025/02/24 21:52:02 by davi             ###   ########.fr       */
+/*   Updated: 2025/02/26 09:40:17 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,19 @@ int	main(int ac, char **av)
 
 	if ((ac == 5 || ac == 6) && parse_error(ac, av) == 0)
 	{
-		printf(GREEN "[PARSE]:" RESET " SUCESSO!\n");
 		init_head(&head, ac, av);
-		allocate_forks(&head);
-		if (!allocate_philos(&head))
+		if (allocate_forks(&head) == -1)
 		{
-			printf("TODO LOGICA DE SAIDA!\n");
-			return (-1);
+			free_forks(&head);
+			return (1);
+		}
+		if (allocate_philos(&head) == -1)
+		{
+			free_philos(&head);
+			return (1);
 		}
 		thread_creator(&head);
 		thread_join(&head);
-		destroy_mutexes(&head);
 		free_resources(&head);
 	}
 	else
